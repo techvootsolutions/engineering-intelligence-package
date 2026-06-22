@@ -1,0 +1,45 @@
+{
+    "name": "techvoot/engineering-intelligence-package",
+    "description": "AI-powered Laravel code analysis and engineering intelligence toolkit.",
+    "type": "library",
+    "license": "MIT",
+
+    "keywords": [
+        "laravel",
+        "ai",
+        "engineering",
+        "code-analysis",
+        "technical-debt"
+    ],
+
+    "autoload": {
+        "psr-4": {
+            "Techvoot\\EIP\\": "src/"
+        }
+    },
+
+    "require": {
+        "php": "^8.2",
+        "laravel/ai": ">=0.2.0",
+        "nikic/php-parser": "^5.7"
+    },
+
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Techvoot\\EIP\\EipServiceProvider"
+            ]
+        }
+    },
+
+    "authors": [
+        {
+            "name": "Techvoot"
+        }
+    ],
+
+    "support": {
+        "issues": "https://github.com/techvoot/engineering-intelligence-package/issues",
+        "source": "https://github.com/techvoot/engineering-intelligence-package"
+    }
+}
