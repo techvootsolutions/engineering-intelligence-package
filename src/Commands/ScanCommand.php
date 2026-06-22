@@ -1,9 +1,9 @@
 <?php
-namespace Dev\EipAgent\Commands;
+namespace Techvoot\EIP\Commands;
 
-use Dev\EipAgent\Reporting\ConsoleUIService;
-use Dev\EipAgent\Reporting\ReportManager;
-use Dev\EipAgent\Services\ReportGenerator;
+use Techvoot\EIP\Reporting\ConsoleUIService;
+use Techvoot\EIP\Reporting\ReportManager;
+use Techvoot\EIP\Services\ReportGenerator;
 use Illuminate\Console\Command;
 
 class ScanCommand extends Command
@@ -90,7 +90,7 @@ class ScanCommand extends Command
         $this->newLine();
 
         // ── Step 5: Print the full summary table ───────────────────────────
-        $printer = app(\Dev\EipAgent\Reporting\ConsoleSummaryPrinter::class);
+        $printer = app(\Techvoot\EIP\Reporting\ConsoleSummaryPrinter::class);
         $printer->print($this, $result, []);
 
         // ── Footer ─────────────────────────────────────────────────────────

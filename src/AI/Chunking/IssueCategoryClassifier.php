@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\Chunking;
+namespace Techvoot\EIP\AI\Chunking;
 
 class IssueCategoryClassifier
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Dev\EipAgent\Exceptions;
+namespace Techvoot\EIP\Exceptions;
 
 use Exception;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Dev\EipAgent\AI\Chunking;
+namespace Techvoot\EIP\AI\Chunking;
 
-use Dev\EipAgent\AI\Prioritization\HotspotAnalyzer;
-use Dev\EipAgent\AI\DTOs\ChunkData;
+use Techvoot\EIP\AI\Prioritization\HotspotAnalyzer;
+use Techvoot\EIP\AI\DTOs\ChunkData;
 
 class AIChunkBuilder
 {

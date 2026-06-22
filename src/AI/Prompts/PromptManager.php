@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\Prompts;
+namespace Techvoot\EIP\AI\Prompts;
 
 class PromptManager
 {

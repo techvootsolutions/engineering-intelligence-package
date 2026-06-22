@@ -1,12 +1,12 @@
 <?php
 
-namespace Dev\EipAgent\AI\Orchestration;
+namespace Techvoot\EIP\AI\Orchestration;
 
-use Dev\EipAgent\AI\AIProviderInterface;
-use Dev\EipAgent\AI\Prompts\PromptManager;
-use Dev\EipAgent\AI\DTOs\ChunkData;
-use Dev\EipAgent\AI\DTOs\AIAnalysisResult;
-use Dev\EipAgent\AI\Recovery\ChunkFailureManager;
+use Techvoot\EIP\AI\AIProviderInterface;
+use Techvoot\EIP\AI\Prompts\PromptManager;
+use Techvoot\EIP\AI\DTOs\ChunkData;
+use Techvoot\EIP\AI\DTOs\AIAnalysisResult;
+use Techvoot\EIP\AI\Recovery\ChunkFailureManager;
 
 class AIAnalysisOrchestrator
 {

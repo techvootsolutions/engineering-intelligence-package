@@ -1,8 +1,8 @@
 <?php
 
-namespace Dev\EipAgent\Services;
+namespace Techvoot\EIP\Services;
 
-use Dev\EipAgent\DTOs\ScanResult;
+use Techvoot\EIP\DTOs\ScanResult;
 
 class PromptBuilder
 {

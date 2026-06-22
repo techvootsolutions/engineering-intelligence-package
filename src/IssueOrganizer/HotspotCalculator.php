@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\IssueOrganizer;
+namespace Techvoot\EIP\IssueOrganizer;
 
 class HotspotCalculator
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Dev\EipAgent\Services;
+namespace Techvoot\EIP\Services;
 
 class RiskSummaryGenerator
 {

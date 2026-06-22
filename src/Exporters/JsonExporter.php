@@ -1,8 +1,8 @@
 <?php
-namespace Dev\EipAgent\Exporters;
+namespace Techvoot\EIP\Exporters;
 
-use Dev\EipAgent\Contracts\ReportExporterInterface;
-use Dev\EipAgent\DTOs\ScanResult;
+use Techvoot\EIP\Contracts\ReportExporterInterface;
+use Techvoot\EIP\DTOs\ScanResult;
 
 class JsonExporter implements ReportExporterInterface
 {

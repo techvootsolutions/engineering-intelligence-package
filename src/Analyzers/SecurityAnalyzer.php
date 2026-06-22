@@ -1,8 +1,8 @@
 <?php
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\Rules\EnvHelperUsageRule;
-use Dev\EipAgent\Rules\RawSqlRule;
+use Techvoot\EIP\Rules\EnvHelperUsageRule;
+use Techvoot\EIP\Rules\RawSqlRule;
 
 class SecurityAnalyzer extends BaseAnalyzer
 {

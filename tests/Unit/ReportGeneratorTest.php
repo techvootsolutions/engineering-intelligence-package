@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Unit;
 
-use Dev\EipAgent\AI\AIManager;
-use Dev\EipAgent\AI\AIProviderInterface;
-use Dev\EipAgent\DTOs\ScanResult;
-use Dev\EipAgent\Scanners\ProjectScanner;
-use Dev\EipAgent\Services\ReportGenerator;
+use Techvoot\EIP\AI\AIManager;
+use Techvoot\EIP\AI\AIProviderInterface;
+use Techvoot\EIP\DTOs\ScanResult;
+use Techvoot\EIP\Scanners\ProjectScanner;
+use Techvoot\EIP\Services\ReportGenerator;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 use Mockery;

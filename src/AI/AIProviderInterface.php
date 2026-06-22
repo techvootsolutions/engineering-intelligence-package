@@ -1,8 +1,8 @@
 <?php
 
-namespace Dev\EipAgent\AI;
+namespace Techvoot\EIP\AI;
 
-use Dev\EipAgent\DTOs\ScanResult;
+use Techvoot\EIP\DTOs\ScanResult;
 
 interface AIProviderInterface
 {

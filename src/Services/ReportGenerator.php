@@ -1,13 +1,13 @@
 <?php
 
-namespace Dev\EipAgent\Services;
+namespace Techvoot\EIP\Services;
 
-use Dev\EipAgent\AI\AIManager;
-use Dev\EipAgent\AI\Serialization\AIContextSerializer;
-use Dev\EipAgent\DTOs\ScanResult;
-use Dev\EipAgent\IssueOrganizer\HotspotCalculator;
-use Dev\EipAgent\IssueOrganizer\IssueOrganizer;
-use Dev\EipAgent\Scanners\ProjectScanner;
+use Techvoot\EIP\AI\AIManager;
+use Techvoot\EIP\AI\Serialization\AIContextSerializer;
+use Techvoot\EIP\DTOs\ScanResult;
+use Techvoot\EIP\IssueOrganizer\HotspotCalculator;
+use Techvoot\EIP\IssueOrganizer\IssueOrganizer;
+use Techvoot\EIP\Scanners\ProjectScanner;
 use Illuminate\Support\Facades\Log;
 
 class ReportGenerator

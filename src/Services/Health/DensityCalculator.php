@@ -1,5 +1,5 @@
 <?php
-namespace Dev\EipAgent\Services\Health;
+namespace Techvoot\EIP\Services\Health;
 
 class DensityCalculator
 {

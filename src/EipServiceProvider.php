@@ -1,14 +1,14 @@
 <?php
-namespace Dev\EipAgent;
+namespace Techvoot\EIP;
 
-use Dev\EipAgent\Commands\ScanCommand;
-use Dev\EipAgent\IssueOrganizer\HotspotCalculator;
-use Dev\EipAgent\IssueOrganizer\IssueOrganizer;
-use Dev\EipAgent\Reporting\ConsoleSummaryPrinter;
-use Dev\EipAgent\Reporting\ConsoleUIService;
-use Dev\EipAgent\Reporting\JsonReportGenerator;
-use Dev\EipAgent\Reporting\MarkdownReportGenerator;
-use Dev\EipAgent\Reporting\ReportManager;
+use Techvoot\EIP\Commands\ScanCommand;
+use Techvoot\EIP\IssueOrganizer\HotspotCalculator;
+use Techvoot\EIP\IssueOrganizer\IssueOrganizer;
+use Techvoot\EIP\Reporting\ConsoleSummaryPrinter;
+use Techvoot\EIP\Reporting\ConsoleUIService;
+use Techvoot\EIP\Reporting\JsonReportGenerator;
+use Techvoot\EIP\Reporting\MarkdownReportGenerator;
+use Techvoot\EIP\Reporting\ReportManager;
 use Illuminate\Support\ServiceProvider;
 
 class EipServiceProvider extends ServiceProvider
@@ -20,19 +20,19 @@ class EipServiceProvider extends ServiceProvider
         );
 
         // ── Analyzer Registry (Rule Engine) ────────────────────────────────
-        $this->app->singleton(\Dev\EipAgent\Services\RuleEngine::class, function ($app) {
-            $engine = new \Dev\EipAgent\Services\RuleEngine();
+        $this->app->singleton(\Techvoot\EIP\Services\RuleEngine::class, function ($app) {
+            $engine = new \Techvoot\EIP\Services\RuleEngine();
 
             // Register all file-type specific analyzers
-            $engine->addAnalyzer(new \Dev\EipAgent\Analyzers\ControllerAnalyzer());
-            $engine->addAnalyzer(new \Dev\EipAgent\Analyzers\ModelAnalyzer());
-            $engine->addAnalyzer(new \Dev\EipAgent\Analyzers\ServiceAnalyzer());
-            $engine->addAnalyzer(new \Dev\EipAgent\Analyzers\RouteAnalyzer());
-            $engine->addAnalyzer(new \Dev\EipAgent\Analyzers\JobAnalyzer());
-            $engine->addAnalyzer(new \Dev\EipAgent\Analyzers\EventAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\ControllerAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\ModelAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\ServiceAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\RouteAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\JobAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\EventAnalyzer());
 
             // Security analyzer scans the entire codebase for vulnerabilities
-            $engine->addAnalyzer(new \Dev\EipAgent\Analyzers\SecurityAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\SecurityAnalyzer());
 
             return $engine;
         });
@@ -50,7 +50,7 @@ class EipServiceProvider extends ServiceProvider
             return new ReportManager(
                 $app->make(JsonReportGenerator::class),
                 $app->make(MarkdownReportGenerator::class),
-                $app->make(\Dev\EipAgent\AI\Reports\AIFinalReportGenerator::class)
+                $app->make(\Techvoot\EIP\AI\Reports\AIFinalReportGenerator::class)
             );
         });
 

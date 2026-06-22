@@ -1,13 +1,13 @@
 <?php
-namespace Dev\EipAgent\Scanners;
+namespace Techvoot\EIP\Scanners;
 
-use Dev\EipAgent\DTOs\ScanResult;
-use Dev\EipAgent\Services\FileDiscoveryService;
-use Dev\EipAgent\Services\HealthScoreCalculator;
-use Dev\EipAgent\Services\IssueBreakdownGenerator;
-use Dev\EipAgent\Services\LaravelVersionDetector;
-use Dev\EipAgent\Services\RiskSummaryGenerator;
-use Dev\EipAgent\Services\RuleEngine;
+use Techvoot\EIP\DTOs\ScanResult;
+use Techvoot\EIP\Services\FileDiscoveryService;
+use Techvoot\EIP\Services\HealthScoreCalculator;
+use Techvoot\EIP\Services\IssueBreakdownGenerator;
+use Techvoot\EIP\Services\LaravelVersionDetector;
+use Techvoot\EIP\Services\RiskSummaryGenerator;
+use Techvoot\EIP\Services\RuleEngine;
 
 class ProjectScanner
 {

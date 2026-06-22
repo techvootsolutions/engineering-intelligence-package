@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\Recovery;
+namespace Techvoot\EIP\AI\Recovery;
 
 enum ChunkStatus: string
 {

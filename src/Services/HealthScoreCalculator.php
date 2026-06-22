@@ -1,13 +1,13 @@
 <?php
-namespace Dev\EipAgent\Services;
+namespace Techvoot\EIP\Services;
 
 class HealthScoreCalculator
 {
     public function __construct(
-        private \Dev\EipAgent\Services\Health\SeverityCalculator $severityCalculator,
-        private \Dev\EipAgent\Services\Health\ComplexityCalculator $complexityCalculator,
-        private \Dev\EipAgent\Services\Health\DensityCalculator $densityCalculator,
-        private \Dev\EipAgent\Services\Health\GradeCalculator $gradeCalculator
+        private \Techvoot\EIP\Services\Health\SeverityCalculator $severityCalculator,
+        private \Techvoot\EIP\Services\Health\ComplexityCalculator $complexityCalculator,
+        private \Techvoot\EIP\Services\Health\DensityCalculator $densityCalculator,
+        private \Techvoot\EIP\Services\Health\GradeCalculator $gradeCalculator
     ) {}
 
     public function calculate(array $issues, int $totalFiles = 1): array

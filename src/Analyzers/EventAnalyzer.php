@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\Rules\MissingListenerRule;
+use Techvoot\EIP\Rules\MissingListenerRule;
 
 class EventAnalyzer extends BaseAnalyzer
 {

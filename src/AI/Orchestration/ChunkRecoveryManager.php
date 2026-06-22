@@ -1,9 +1,9 @@
 <?php
 
-namespace Dev\EipAgent\AI\Orchestration;
+namespace Techvoot\EIP\AI\Orchestration;
 
 use Exception;
-use Dev\EipAgent\AI\DTOs\ChunkData;
+use Techvoot\EIP\AI\DTOs\ChunkData;
 
 class ChunkRecoveryManager
 {

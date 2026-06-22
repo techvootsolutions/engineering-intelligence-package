@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\Rules;
+namespace Techvoot\EIP\Rules;
 
 abstract class BaseRule
 {
@@ -14,8 +14,8 @@ abstract class BaseRule
         int $score = 0,
         array $extra = [],
         int $line = 0
-    ): \Dev\EipAgent\DTOs\Issue {
-        return new \Dev\EipAgent\DTOs\Issue(
+    ): \Techvoot\EIP\DTOs\Issue {
+        return new \Techvoot\EIP\DTOs\Issue(
             type: $type,
             severity: $severity,
             file: $file,

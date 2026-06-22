@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Rules;
+namespace Techvoot\EIP\Rules;
 
-use Dev\EipAgent\Rules\BaseRule;
+use Techvoot\EIP\Rules\BaseRule;
 
 class LongMethodRule extends BaseRule
 {

@@ -1,9 +1,9 @@
 <?php
 namespace Tests\Unit;
 
-use Dev\EipAgent\DTOs\ScanResult;
-use Dev\EipAgent\Reporting\JsonReportGenerator;
-use Dev\EipAgent\Reporting\MarkdownReportGenerator;
+use Techvoot\EIP\DTOs\ScanResult;
+use Techvoot\EIP\Reporting\JsonReportGenerator;
+use Techvoot\EIP\Reporting\MarkdownReportGenerator;
 use Tests\TestCase;
 
 class ReportingTest extends TestCase

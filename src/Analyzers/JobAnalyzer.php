@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\Rules\SyncDispatchRule;
+use Techvoot\EIP\Rules\SyncDispatchRule;
 
 class JobAnalyzer extends BaseAnalyzer
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\Prioritization;
+namespace Techvoot\EIP\AI\Prioritization;
 
 class IssuePriorityResolver
 {

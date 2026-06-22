@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Services;
+namespace Techvoot\EIP\Services;
 
-use Dev\EipAgent\Exceptions\AIConfigurationException;
+use Techvoot\EIP\Exceptions\AIConfigurationException;
 
 class AIConfigurationValidator
 {

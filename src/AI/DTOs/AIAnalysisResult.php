@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\DTOs;
+namespace Techvoot\EIP\AI\DTOs;
 
 class AIAnalysisResult
 {

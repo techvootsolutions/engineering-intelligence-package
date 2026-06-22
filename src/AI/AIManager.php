@@ -1,12 +1,12 @@
 <?php
 
-namespace Dev\EipAgent\AI;
+namespace Techvoot\EIP\AI;
 
-use Dev\EipAgent\AI\AIProviderInterface;
-use Dev\EipAgent\AI\GeminiProvider;
-use Dev\EipAgent\AI\OpenAIProvider;
-use Dev\EipAgent\AI\OpenRouterProvider;
-use Dev\EipAgent\Services\AIConfigurationValidator;
+use Techvoot\EIP\AI\AIProviderInterface;
+use Techvoot\EIP\AI\GeminiProvider;
+use Techvoot\EIP\AI\OpenAIProvider;
+use Techvoot\EIP\AI\OpenRouterProvider;
+use Techvoot\EIP\Services\AIConfigurationValidator;
 
 class AIManager
 {

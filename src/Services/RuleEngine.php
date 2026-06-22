@@ -1,9 +1,9 @@
 <?php
 
-namespace Dev\EipAgent\Services;
+namespace Techvoot\EIP\Services;
 
-use Dev\EipAgent\Analyzers\BaseAnalyzer;
-use Dev\EipAgent\DTOs\FileResult;
+use Techvoot\EIP\Analyzers\BaseAnalyzer;
+use Techvoot\EIP\DTOs\FileResult;
 
 class RuleEngine
 {
@@ -18,7 +18,7 @@ class RuleEngine
     /**
      * @param FileResult[] $files
      * @param \Closure|null $onProgress
-     * @return array{issues: \Dev\EipAgent\DTOs\Issue[], rules_executed: int}
+     * @return array{issues: \Techvoot\EIP\DTOs\Issue[], rules_executed: int}
      */
     public function execute(array $files, ?\Closure $onProgress = null): array
     {

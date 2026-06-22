@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\Scanners;
+namespace Techvoot\EIP\Scanners;
 
 use Illuminate\Support\Facades\File;
 

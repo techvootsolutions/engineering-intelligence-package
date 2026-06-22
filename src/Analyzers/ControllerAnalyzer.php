@@ -1,12 +1,12 @@
 <?php
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\Rules\FatControllerRule;
-use Dev\EipAgent\Rules\LongMethodRule;
-use Dev\EipAgent\Rules\MissingFormRequestRule;
-use Dev\EipAgent\Rules\MissingTransactionRule;
-use Dev\EipAgent\Rules\PotentialNPlusOneRule;
-use Dev\EipAgent\Rules\TooManyDependenciesRule;
+use Techvoot\EIP\Rules\FatControllerRule;
+use Techvoot\EIP\Rules\LongMethodRule;
+use Techvoot\EIP\Rules\MissingFormRequestRule;
+use Techvoot\EIP\Rules\MissingTransactionRule;
+use Techvoot\EIP\Rules\PotentialNPlusOneRule;
+use Techvoot\EIP\Rules\TooManyDependenciesRule;
 
 class ControllerAnalyzer extends BaseAnalyzer
 {

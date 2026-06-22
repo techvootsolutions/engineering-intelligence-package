@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\Rules\ServiceGodClassRule;
+use Techvoot\EIP\Rules\ServiceGodClassRule;
 
 class ServiceAnalyzer extends BaseAnalyzer
 {

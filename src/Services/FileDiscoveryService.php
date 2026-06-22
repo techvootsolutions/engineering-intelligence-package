@@ -1,9 +1,9 @@
 <?php
 
-namespace Dev\EipAgent\Services;
+namespace Techvoot\EIP\Services;
 
-use Dev\EipAgent\DTOs\FileResult;
-use Dev\EipAgent\DTOs\Metrics;
+use Techvoot\EIP\DTOs\FileResult;
+use Techvoot\EIP\DTOs\Metrics;
 use Illuminate\Support\Facades\File;
 
 class FileDiscoveryService

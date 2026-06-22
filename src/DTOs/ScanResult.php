@@ -1,5 +1,5 @@
 <?php
-namespace Dev\EipAgent\DTOs;
+namespace Techvoot\EIP\DTOs;
 
 class ScanResult
 {

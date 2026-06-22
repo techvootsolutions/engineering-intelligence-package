@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\Schemas;
+namespace Techvoot\EIP\AI\Schemas;
 
 class AIResponseSchemaValidator
 {

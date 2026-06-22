@@ -1,14 +1,14 @@
 <?php
 
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\DTOs\FileResult;
+use Techvoot\EIP\DTOs\FileResult;
 
 abstract class BaseAnalyzer
 {
     /**
      * @param FileResult[] $files
-     * @return \Dev\EipAgent\DTOs\Issue[]
+     * @return \Techvoot\EIP\DTOs\Issue[]
      */
     abstract public function analyze(array $files): array;
 

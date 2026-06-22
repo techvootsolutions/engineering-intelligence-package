@@ -1,14 +1,14 @@
 <?php
 
-namespace Dev\EipAgent\AI\Serialization;
+namespace Techvoot\EIP\AI\Serialization;
 
-use Dev\EipAgent\AI\Aggregation\IssueAggregator;
-use Dev\EipAgent\AI\Chunking\AIChunkBuilder;
-use Dev\EipAgent\AI\Chunking\IssueCategoryClassifier;
-use Dev\EipAgent\AI\Chunking\TokenEstimator;
-use Dev\EipAgent\AI\Compression\AIContextCompressor;
-use Dev\EipAgent\AI\DTOs\IssueData;
-use Dev\EipAgent\DTOs\ScanResult;
+use Techvoot\EIP\AI\Aggregation\IssueAggregator;
+use Techvoot\EIP\AI\Chunking\AIChunkBuilder;
+use Techvoot\EIP\AI\Chunking\IssueCategoryClassifier;
+use Techvoot\EIP\AI\Chunking\TokenEstimator;
+use Techvoot\EIP\AI\Compression\AIContextCompressor;
+use Techvoot\EIP\AI\DTOs\IssueData;
+use Techvoot\EIP\DTOs\ScanResult;
 
 /**
  * AIContextSerializer

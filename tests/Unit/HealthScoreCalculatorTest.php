@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit;
 
-use Dev\EipAgent\Services\HealthScoreCalculator;
+use Techvoot\EIP\Services\HealthScoreCalculator;
 use PHPUnit\Framework\TestCase;
 
 class HealthScoreCalculatorTest extends TestCase

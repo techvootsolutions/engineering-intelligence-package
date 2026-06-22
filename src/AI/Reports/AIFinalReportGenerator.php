@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\Reports;
+namespace Techvoot\EIP\AI\Reports;
 
 /**
  * AIFinalReportGenerator

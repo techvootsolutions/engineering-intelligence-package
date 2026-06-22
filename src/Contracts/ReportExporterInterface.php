@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Contracts;
+namespace Techvoot\EIP\Contracts;
 
-use Dev\EipAgent\DTOs\ScanResult;
+use Techvoot\EIP\DTOs\ScanResult;
 
 interface ReportExporterInterface
 {

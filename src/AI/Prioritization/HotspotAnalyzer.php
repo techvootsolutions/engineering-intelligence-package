@@ -1,8 +1,8 @@
 <?php
 
-namespace Dev\EipAgent\AI\Prioritization;
+namespace Techvoot\EIP\AI\Prioritization;
 
-use Dev\EipAgent\AI\DTOs\IssueData;
+use Techvoot\EIP\AI\DTOs\IssueData;
 
 class HotspotAnalyzer
 {

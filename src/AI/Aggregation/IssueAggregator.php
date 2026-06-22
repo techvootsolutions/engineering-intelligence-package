@@ -1,8 +1,8 @@
 <?php
 
-namespace Dev\EipAgent\AI\Aggregation;
+namespace Techvoot\EIP\AI\Aggregation;
 
-use Dev\EipAgent\AI\DTOs\IssueData;
+use Techvoot\EIP\AI\DTOs\IssueData;
 
 class IssueAggregator
 {

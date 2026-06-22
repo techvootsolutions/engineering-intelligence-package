@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Unit;
 
-use Dev\EipAgent\AI\AIManager;
-use Dev\EipAgent\AI\GeminiProvider;
-use Dev\EipAgent\AI\OpenAIProvider;
-use Dev\EipAgent\Exceptions\AIConfigurationException;
-use Dev\EipAgent\Services\AIConfigurationValidator;
+use Techvoot\EIP\AI\AIManager;
+use Techvoot\EIP\AI\GeminiProvider;
+use Techvoot\EIP\AI\OpenAIProvider;
+use Techvoot\EIP\Exceptions\AIConfigurationException;
+use Techvoot\EIP\Services\AIConfigurationValidator;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 

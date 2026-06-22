@@ -1,8 +1,8 @@
 <?php
-namespace Dev\EipAgent\Reporting;
+namespace Techvoot\EIP\Reporting;
 
-use Dev\EipAgent\Contracts\ReportExporterInterface;
-use Dev\EipAgent\DTOs\ScanResult;
+use Techvoot\EIP\Contracts\ReportExporterInterface;
+use Techvoot\EIP\DTOs\ScanResult;
 
 /**
  * JsonReportGenerator

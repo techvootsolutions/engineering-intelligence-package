@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\Rules\MassAssignmentRule;
+use Techvoot\EIP\Rules\MassAssignmentRule;
 
 class ModelAnalyzer extends BaseAnalyzer
 {

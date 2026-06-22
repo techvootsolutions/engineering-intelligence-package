@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Analyzers;
+namespace Techvoot\EIP\Analyzers;
 
-use Dev\EipAgent\Rules\ClosureRouteRule;
+use Techvoot\EIP\Rules\ClosureRouteRule;
 
 class RouteAnalyzer extends BaseAnalyzer
 {

@@ -1,9 +1,9 @@
 <?php
-namespace Dev\EipAgent\AI;
+namespace Techvoot\EIP\AI;
 
-use Dev\EipAgent\DTOs\ScanResult;
-use Dev\EipAgent\Exceptions\AIProviderException;
-use Dev\EipAgent\Services\PromptBuilder;
+use Techvoot\EIP\DTOs\ScanResult;
+use Techvoot\EIP\Exceptions\AIProviderException;
+use Techvoot\EIP\Services\PromptBuilder;
 use Illuminate\Support\Facades\Http;
 
 class OpenAIProvider implements AIProviderInterface

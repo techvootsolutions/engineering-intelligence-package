@@ -1,10 +1,10 @@
 <?php
 
-namespace Dev\EipAgent\AI\Mappers;
+namespace Techvoot\EIP\AI\Mappers;
 
-use Dev\EipAgent\DTOs\Issue;
-use Dev\EipAgent\AI\DTOs\IssueData;
-use Dev\EipAgent\AI\Chunking\IssueCategoryClassifier;
+use Techvoot\EIP\DTOs\Issue;
+use Techvoot\EIP\AI\DTOs\IssueData;
+use Techvoot\EIP\AI\Chunking\IssueCategoryClassifier;
 
 class IssueMapper
 {

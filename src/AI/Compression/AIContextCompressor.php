@@ -1,6 +1,6 @@
 <?php
 
-namespace Dev\EipAgent\AI\Compression;
+namespace Techvoot\EIP\AI\Compression;
 
 class AIContextCompressor
 {

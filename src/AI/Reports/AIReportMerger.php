@@ -1,9 +1,9 @@
 <?php
 
-namespace Dev\EipAgent\AI\Reports;
+namespace Techvoot\EIP\AI\Reports;
 
-use Dev\EipAgent\AI\AIProviderInterface;
-use Dev\EipAgent\AI\DTOs\AIAnalysisResult;
+use Techvoot\EIP\AI\AIProviderInterface;
+use Techvoot\EIP\AI\DTOs\AIAnalysisResult;
 
 class AIReportMerger
 {

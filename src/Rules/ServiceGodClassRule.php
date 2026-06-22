@@ -1,7 +1,7 @@
 <?php
-namespace Dev\EipAgent\Rules;
+namespace Techvoot\EIP\Rules;
 
-use Dev\EipAgent\DTOs\FileResult;
+use Techvoot\EIP\DTOs\FileResult;
 
 class ServiceGodClassRule extends BaseRule
 {

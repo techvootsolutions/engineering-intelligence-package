@@ -1,9 +1,9 @@
 <?php
 
-namespace Dev\EipAgent\AI\Recovery;
+namespace Techvoot\EIP\AI\Recovery;
 
-use Dev\EipAgent\AI\DTOs\ChunkData;
-use Dev\EipAgent\AI\DTOs\AIAnalysisResult;
+use Techvoot\EIP\AI\DTOs\ChunkData;
+use Techvoot\EIP\AI\DTOs\AIAnalysisResult;
 
 class ChunkFailureManager
 {

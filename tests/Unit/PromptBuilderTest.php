@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Unit;
 
-use Dev\EipAgent\DTOs\ScanResult;
-use Dev\EipAgent\Services\PromptBuilder;
+use Techvoot\EIP\DTOs\ScanResult;
+use Techvoot\EIP\Services\PromptBuilder;
 use PHPUnit\Framework\TestCase;
 
 class PromptBuilderTest extends TestCase
