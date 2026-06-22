@@ -89,3 +89,212 @@ EIP lets you choose which AI brain you want to use. We currently support:
   ]
 }
 ```
+
+# Usage
+
+## Publish the Configuration File
+
+After installing the package, publish the EIP configuration file:
+
+```bash
+php artisan vendor:publish --tag=eip-config
+```
+
+This command will create the EIP configuration file inside your application's `config` directory.
+
+---
+
+## Enable AI-Powered Insights (Optional)
+
+EIP can generate AI-powered engineering insights and recommendations.
+
+To enable AI analysis, add the following settings to your `.env` file:
+
+```env
+EIP_AI_ENABLED=true
+EIP_AI_PROVIDER=openai
+```
+
+### Supported AI Providers
+
+```env
+openai
+gemini
+openrouter
+mistral
+```
+
+### OpenAI Example
+
+```env
+EIP_AI_ENABLED=true
+EIP_AI_PROVIDER=openai
+
+OPENAI_API_KEY=your-api-key
+OPENAI_MODEL=gpt-5
+```
+
+### Gemini Example
+
+```env
+EIP_AI_ENABLED=true
+EIP_AI_PROVIDER=gemini
+
+GEMINI_API_KEY=your-api-key
+GEMINI_MODEL=gemini-2.5-pro
+```
+
+### OpenRouter Example
+
+```env
+EIP_AI_ENABLED=true
+EIP_AI_PROVIDER=openrouter
+
+EIP_OPENROUTER_API_KEY=your-api-key
+EIP_OPENROUTER_MODEL=anthropic/claude-sonnet-4
+```
+
+### Mistral Example
+
+```env
+EIP_AI_ENABLED=true
+EIP_AI_PROVIDER=mistral
+
+EIP_MISTRAL_API_KEY=your-api-key
+EIP_MISTRAL_MODEL=mistral-large-latest
+```
+
+> AI integration is optional. EIP can generate engineering reports even when AI is disabled.
+
+---
+
+# Running Analysis
+
+## Quick Project Health Report
+
+Generate a summarized engineering report:
+
+```bash
+php artisan eip
+```
+
+## Detailed JSON Report
+
+Generate a detailed JSON report:
+
+```bash
+php artisan eip --json
+```
+
+## Markdown Report
+
+Generate a Markdown report:
+
+```bash
+php artisan eip --markdown
+```
+
+## Generate All Reports
+
+Generate both JSON and Markdown reports:
+
+```bash
+php artisan eip --export
+```
+
+---
+
+# Available Options
+
+### Save Reports to a Custom Location
+
+```bash
+php artisan eip --output=storage/reports
+```
+
+### Filter by Severity
+
+Show only issues of a specific severity level:
+
+```bash
+php artisan eip --severity=critical
+```
+
+Available severity levels:
+
+```text
+critical
+high
+warning
+info
+```
+
+### Filter by Issue Type
+
+Show only specific issue types:
+
+```bash
+php artisan eip --type=n_plus_one
+```
+
+### Filter by File Name
+
+Show issues related to a specific file:
+
+```bash
+php artisan eip --file=UserController
+```
+
+### Limit Console Output
+
+Display only a specific number of issues:
+
+```bash
+php artisan eip --limit=20
+```
+
+### Sort Results
+
+Sort output by severity, file name, or line number:
+
+```bash
+php artisan eip --sort=severity
+```
+
+Available sort options:
+
+```text
+severity
+file
+line
+```
+
+---
+
+# Example Commands
+
+```bash
+# Generate a quick report
+php artisan eip
+
+# Generate a JSON report
+php artisan eip --json
+
+# Generate a Markdown report
+php artisan eip --markdown
+
+# Generate all report formats
+php artisan eip --export
+
+# Show only critical issues
+php artisan eip --severity=critical
+
+# Show issues from UserController
+php artisan eip --file=UserController
+
+# Show only N+1 query issues
+php artisan eip --type=n_plus_one
+
+# Limit output to 10 results
+php artisan eip --limit=10
+```
