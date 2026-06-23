@@ -59,15 +59,16 @@ EIP saves different types of reports depending on what you need. You can find th
 
 ### 1. Raw Report
 The complete, unedited list of every single issue found. Great for debugging.
-**Location:** `storage/app/eip/reports/`
+**Location:** `storage/app/eip/reports/eip-raw-{timestamp}.json`
 
-### 2. AI Context Report
-The compressed, token-safe data sent to the AI.
-**Location:** `storage/app/eip/context/`
+### 2. AI Context
+The compressed, token-safe data sent to the AI. *(Note: This is generated in-memory for the AI and is not saved to your disk to keep your project clean).*
 
-### 3. AI Final Report
+### 3. AI Final Report (if AI is enabled)
 The beautiful, AI-generated summary full of engineering insights and recommendations.
-**Location:** `storage/app/eip/ai/`
+**Location:** `storage/app/eip/ai/eip-ai-report-{timestamp}.json`
+
+*When you run the command, EIP will print absolute, clickable links to these files directly in your terminal!*
 
 ## Supported AI Providers
 EIP lets you choose which AI brain you want to use. We currently support:
@@ -124,44 +125,15 @@ openrouter
 mistral
 ```
 
-### OpenAI Example
+### Unified Environment Variables
+
+Regardless of which AI provider you choose, you use the same environment variables to configure it:
 
 ```env
 EIP_AI_ENABLED=true
-EIP_AI_PROVIDER=openai
-
-OPENAI_API_KEY=your-api-key
-OPENAI_MODEL=gpt-5
-```
-
-### Gemini Example
-
-```env
-EIP_AI_ENABLED=true
-EIP_AI_PROVIDER=gemini
-
-GEMINI_API_KEY=your-api-key
-GEMINI_MODEL=gemini-2.5-pro
-```
-
-### OpenRouter Example
-
-```env
-EIP_AI_ENABLED=true
-EIP_AI_PROVIDER=openrouter
-
-EIP_OPENROUTER_API_KEY=your-api-key
-EIP_OPENROUTER_MODEL=anthropic/claude-sonnet-4
-```
-
-### Mistral Example
-
-```env
-EIP_AI_ENABLED=true
-EIP_AI_PROVIDER=mistral
-
-EIP_MISTRAL_API_KEY=your-api-key
-EIP_MISTRAL_MODEL=mistral-large-latest
+EIP_AI_PROVIDER=gemini        # openai, gemini, openrouter, or mistral
+EIP_AI_MODEL=gemini-2.5-pro   # e.g., gpt-4o, codestral-latest
+EIP_AI_KEY=your-api-key-here
 ```
 
 > AI integration is optional. EIP can generate engineering reports even when AI is disabled.
@@ -170,20 +142,12 @@ EIP_MISTRAL_MODEL=mistral-large-latest
 
 # Running Analysis
 
-## Quick Project Health Report
+## Standard Analysis
 
-Generate a summarized engineering report:
+Generate a summarized engineering report in the console, along with the raw JSON file (and AI JSON file, if enabled):
 
 ```bash
 php artisan eip
-```
-
-## Detailed JSON Report
-
-Generate a detailed JSON report:
-
-```bash
-php artisan eip --json
 ```
 
 ## Markdown Report
@@ -274,11 +238,8 @@ line
 # Example Commands
 
 ```bash
-# Generate a quick report
+# Generate a standard report (with auto-generated JSON files)
 php artisan eip
-
-# Generate a JSON report
-php artisan eip --json
 
 # Generate a Markdown report
 php artisan eip --markdown

@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class ConsoleSummaryPrinter
 {
-    public function print(Command $command, ScanResult $result, array $generatedFiles = []): void
+    public function print(Command $command, ScanResult $result, array $generatedFiles = [], array $activeFilters = []): void
     {
         $command->newLine();
         $command->line('<fg=cyan;options=bold>╔══════════════════════════════════════╗</>');
@@ -56,16 +56,57 @@ class ConsoleSummaryPrinter
             );
         }
 
-        // ── Top critical issues (up to 10) ────────────────────────────────
-        $criticals = array_filter($result->issues, fn ($i) => ($i['severity'] ?? '') === 'critical');
-        if (!empty($criticals)) {
-            $command->line('<fg=white;options=bold>  🔴 Top Critical Issues</>');
+        // ── Filtered Issues / Top Critical Issues ────────────────────────────────
+        $issues = $result->issues;
+        $isFiltered = !empty($activeFilters['severity']) || !empty($activeFilters['type']) || !empty($activeFilters['file']);
+
+        if ($isFiltered) {
+            if (!empty($activeFilters['severity'])) {
+                $sev = strtolower($activeFilters['severity']);
+                $issues = array_filter($issues, fn ($i) => strtolower($i['severity'] ?? '') === $sev);
+            }
+            if (!empty($activeFilters['type'])) {
+                $type = strtolower($activeFilters['type']);
+                $issues = array_filter($issues, fn ($i) => strtolower($i['type'] ?? '') === $type);
+            }
+            if (!empty($activeFilters['file'])) {
+                $file = strtolower($activeFilters['file']);
+                $issues = array_filter($issues, fn ($i) => str_contains(strtolower($i['file'] ?? ''), $file));
+            }
+        } else {
+            // Default behavior: only show criticals
+            $issues = array_filter($issues, fn ($i) => ($i['severity'] ?? '') === 'critical');
+        }
+
+        // Sorting
+        $sort = strtolower($activeFilters['sort'] ?? 'severity');
+        usort($issues, function ($a, $b) use ($sort) {
+            if ($sort === 'file') return strcmp($a['file'] ?? '', $b['file'] ?? '');
+            if ($sort === 'line') return ($a['line'] ?? 0) <=> ($b['line'] ?? 0);
+            
+            $wA = $this->severityWeight($a['severity'] ?? '');
+            $wB = $this->severityWeight($b['severity'] ?? '');
+            if ($wA === $wB) {
+                return strcmp($a['file'] ?? '', $b['file'] ?? '');
+            }
+            return $wB <=> $wA;
+        });
+
+        // Limit
+        $limit = !empty($activeFilters['limit']) ? (int) $activeFilters['limit'] : ($isFiltered ? count($issues) : 10);
+        $issues = array_slice($issues, 0, $limit);
+
+        if (!empty($issues)) {
+            $title = $isFiltered ? '  🔍 Filtered Issues' : '  🔴 Top Critical Issues';
+            $command->line("<fg=white;options=bold>{$title}</>");
             $command->newLine();
 
             $rows = [];
-            foreach (array_slice(array_values($criticals), 0, 10) as $issue) {
+            foreach ($issues as $issue) {
+                $severity = ucfirst($issue['severity'] ?? 'Unknown');
                 $rows[] = [
                     $issue['id']   ?? '—',
+                    $severity,
                     basename($issue['file'] ?? '—'),
                     $issue['line'] > 0 ? $issue['line'] : '—',
                     ucwords(str_replace('_', ' ', $issue['type'] ?? '—')),
@@ -74,9 +115,12 @@ class ConsoleSummaryPrinter
             }
 
             $command->table(
-                ['ID', 'File', 'Line', 'Type', 'Message'],
+                ['ID', 'Severity', 'File', 'Line', 'Type', 'Message'],
                 $rows
             );
+        } elseif ($isFiltered) {
+            $command->line('<fg=yellow;options=bold>  🔍 No issues found matching the given filters.</>');
+            $command->newLine();
         }
 
         // ── Generated files ────────────────────────────────────────────────
@@ -124,5 +168,16 @@ class ConsoleSummaryPrinter
     private function truncate(string $str, int $max): string
     {
         return mb_strlen($str) > $max ? mb_substr($str, 0, $max - 1) . '…' : $str;
+    }
+
+    private function severityWeight(string $severity): int
+    {
+        return match (strtolower($severity)) {
+            'critical' => 4,
+            'high'     => 3,
+            'warning'  => 2,
+            'info'     => 1,
+            default    => 0,
+        };
     }
 }

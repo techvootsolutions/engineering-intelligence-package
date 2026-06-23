@@ -9,7 +9,6 @@ use Illuminate\Console\Command;
 class ScanCommand extends Command
 {
     protected $signature = 'eip
-        {--json        : Output report in JSON format}
         {--markdown    : Output report in Markdown format}
         {--export      : Generate all reports (JSON + Markdown)}
         {--output=     : Custom output directory or file path}
@@ -77,7 +76,7 @@ class ScanCommand extends Command
         $this->line('📄 <fg=white>Generating reports...</>');
 
         $generatedFiles = $reportManager->handle($result, [
-            'json'     => $this->option('json'),
+            'json'     => true,
             'markdown' => $this->option('markdown'),
             'export'   => $this->option('export'),
             'output'   => $this->option('output'),
@@ -92,8 +91,16 @@ class ScanCommand extends Command
         $this->newLine();
 
         // ── Step 5: Print the full summary table ───────────────────────────
+        $active = array_filter([
+            'severity' => $this->option('severity'),
+            'type'     => $this->option('type'),
+            'file'     => $this->option('file'),
+            'limit'    => $this->option('limit'),
+            'sort'     => $this->option('sort'),
+        ]);
+
         $printer = app(\Techvoot\EIP\Reporting\ConsoleSummaryPrinter::class);
-        $printer->print($this, $result, []);
+        $printer->print($this, $result, [], $active);
 
         // ── Footer ─────────────────────────────────────────────────────────
         $elapsed = (microtime(true) - $startTime) * 1000;
