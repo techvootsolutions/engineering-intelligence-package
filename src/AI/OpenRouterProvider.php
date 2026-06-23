@@ -4,8 +4,7 @@ namespace Techvoot\EIP\AI;
 use Techvoot\EIP\DTOs\ScanResult;
 use Techvoot\EIP\Exceptions\AIProviderException;
 use Techvoot\EIP\Services\PromptBuilder;
-
-use function Laravel\Ai\agent;
+use Illuminate\Support\Facades\Http;
 
 class OpenRouterProvider implements AIProviderInterface
 {
@@ -18,16 +17,41 @@ class OpenRouterProvider implements AIProviderInterface
      */
     public function analyzeContext(array $context): string
     {
-        $prompt = $this->promptBuilder->buildFromContext($context);
+        $prompt  = $this->promptBuilder->buildFromContext($context);
+        $apiKey  = config('eip.providers.openrouter.api_key');
+        $model   = config('eip.models.openrouter', 'gpt-4');
+        $timeout = config('eip.timeout', 60);
 
         try {
-            $response = agent(
-                'You are a Senior Laravel Architect performing an engineering intelligence audit. Be concise and actionable.'
-            )->prompt($prompt, provider: 'openrouter');
+            $response = Http::withToken($apiKey)
+                ->timeout($timeout)
+                ->post('https://openrouter.ai/api/v1/chat/completions', [
+                    'model'    => $model,
+                    'messages' => [
+                        ['role' => 'system', 'content' => 'You are a Senior Laravel Architect performing an engineering intelligence audit. Be concise and actionable.'],
+                        ['role' => 'user',   'content' => $prompt],
+                    ],
+                ]);
 
-            return (string) $response;
+            if ($response->failed()) {
+                if ($response->status() === 429) {
+                    throw new AIProviderException("OpenRouter Rate Limit Exceeded.");
+                }
+                $errorData    = $response->json();
+                $errorMessage = $errorData['error']['message'] ?? $response->body();
+                throw new AIProviderException("OpenRouter API error: " . $errorMessage);
+            }
+
+            $data = $response->json();
+            $text = $data['choices'][0]['message']['content'] ?? '';
+
+            if (empty($text)) {
+                throw new AIProviderException("OpenRouter returned an empty response.");
+            }
+
+            return $text;
         } catch (\Exception $e) {
-            throw new AIProviderException('Failed to communicate with OpenRouter: ' . $e->getMessage(), 0, $e);
+            throw new AIProviderException("Failed to communicate with OpenRouter: " . $e->getMessage(), 0, $e);
         }
     }
 
@@ -36,14 +60,37 @@ class OpenRouterProvider implements AIProviderInterface
      */
     public function analyze(string $prompt): string
     {
-        try {
-            $response = agent(
-                'You are a senior Laravel architecture auditor.'
-            )->prompt($prompt, provider: 'openrouter');
+        $apiKey  = config('eip.providers.openrouter.api_key');
+        $model   = config('eip.models.openrouter', 'gpt-4');
+        $timeout = config('eip.timeout', 60);
 
-            return (string) $response;
+        try {
+            $response = Http::withToken($apiKey)
+                ->timeout($timeout)
+                ->post('https://openrouter.ai/api/v1/chat/completions', [
+                    'model'    => $model,
+                    'messages' => [['role' => 'user', 'content' => $prompt]],
+                ]);
+
+            if ($response->failed()) {
+                if ($response->status() === 429) {
+                    throw new AIProviderException("OpenRouter Rate Limit Exceeded.");
+                }
+                $errorData    = $response->json();
+                $errorMessage = $errorData['error']['message'] ?? $response->body();
+                throw new AIProviderException("OpenRouter API error: " . $errorMessage);
+            }
+
+            $data = $response->json();
+            $text = $data['choices'][0]['message']['content'] ?? '';
+
+            if (empty($text)) {
+                throw new AIProviderException("OpenRouter returned an empty response.");
+            }
+
+            return $text;
         } catch (\Exception $e) {
-            throw new AIProviderException('Failed to communicate with OpenRouter: ' . $e->getMessage(), 0, $e);
+            throw new AIProviderException("Failed to communicate with OpenRouter: " . $e->getMessage(), 0, $e);
         }
     }
 
@@ -52,7 +99,7 @@ class OpenRouterProvider implements AIProviderInterface
      */
     public function generateReport(ScanResult $scan): string
     {
-        $prompt = $this->promptBuilder->build($scan);
+        $prompt  = $this->promptBuilder->build($scan);
         return $this->analyze($prompt);
     }
 }
