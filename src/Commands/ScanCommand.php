@@ -84,7 +84,9 @@ class ScanCommand extends Command
         ]);
 
         foreach ($generatedFiles as $file) {
-            $this->line("  <fg=green>✓</> " . basename($file));
+            $absolutePath = base_path($file);
+            $absoluteUrl = str_replace('\\', '/', $absolutePath);
+            $this->line("  <fg=green>✓</> <href=file://{$absoluteUrl}>{$absolutePath}</>");
         }
 
         $this->newLine();

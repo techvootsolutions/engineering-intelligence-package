@@ -72,11 +72,7 @@ class ReportManager
         if (!empty($result->aiContext)) {
             if ($wantsJson) {
                 // Layer 2: AI Context payload
-                $contextDir = $customBase ?? ($eipBase . '/context');
-                $this->ensureDir($contextDir);
-                $path = $contextDir . "/eip-ai-context-{$timestamp}.json";
-                File::put($path, json_encode($result->aiContext, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-                $generatedFiles[] = $this->formatPath($path);
+                // Skipped: The context is used to create the AI report but the file itself is no longer persisted.
 
                 // Layer 3: AI Final Report
                 if ($result->aiReport && !$result->aiScanFailed) {
