@@ -21,7 +21,7 @@ class ProjectScanner
     ) {
     }
 
-    public function scan(?\Closure $onProgress = null): ScanResult
+    public function scan(?\Closure $onProgress = null, array $filters = []): ScanResult
     {
         $basePath = base_path();
         
@@ -49,7 +49,10 @@ class ProjectScanner
 
         $issuesArray = array_map(fn($issue) => $issue->toArray(), $analysis['issues']);
 
-        // 4. Calculate Health & Summaries
+        // Apply filters globally to the issue array
+        $issuesArray = $this->applyFilters($issuesArray, $filters);
+
+        // 4. Calculate Health & Summaries based ONLY on filtered issues
         $health = $this->healthScoreCalculator->calculate($issuesArray, count($files));
         $issueBreakdown = $this->issueBreakdownGenerator->generate($issuesArray);
         $summary = $this->riskSummaryGenerator->generate($issuesArray);
@@ -68,5 +71,61 @@ class ProjectScanner
             issueBreakdown: $issueBreakdown,
             summary: $summary
         );
+    }
+
+    private function applyFilters(array $issues, array $filters): array
+    {
+        if (empty($filters)) {
+            return $issues;
+        }
+
+        if (!empty($filters['severity'])) {
+            $sev = strtolower($filters['severity']);
+            $issues = array_filter($issues, fn ($i) => strtolower($i['severity'] ?? '') === $sev);
+        }
+        if (!empty($filters['type'])) {
+            $type = strtolower($filters['type']);
+            $issues = array_filter($issues, fn ($i) => strtolower($i['type'] ?? '') === $type);
+        }
+        if (!empty($filters['file'])) {
+            $file = strtolower($filters['file']);
+            $issues = array_filter($issues, fn ($i) => str_contains(strtolower($i['file'] ?? ''), $file));
+        }
+
+        // Apply sorting
+        if (!empty($filters['sort'])) {
+            $sort = strtolower($filters['sort']);
+            usort($issues, function ($a, $b) use ($sort) {
+                if ($sort === 'file') return strcmp($a['file'] ?? '', $b['file'] ?? '');
+                if ($sort === 'line') return ($a['line'] ?? 0) <=> ($b['line'] ?? 0);
+                
+                $wA = $this->severityWeight($a['severity'] ?? '');
+                $wB = $this->severityWeight($b['severity'] ?? '');
+                if ($wA === $wB) {
+                    return strcmp($a['file'] ?? '', $b['file'] ?? '');
+                }
+                return $wB <=> $wA;
+            });
+        }
+
+        // Re-index array after filtering
+        $issues = array_values($issues);
+
+        if (!empty($filters['limit'])) {
+            $issues = array_slice($issues, 0, (int)$filters['limit']);
+        }
+
+        return $issues;
+    }
+
+    private function severityWeight(string $severity): int
+    {
+        return match (strtolower($severity)) {
+            'critical' => 4,
+            'high'     => 3,
+            'warning'  => 2,
+            'info'     => 1,
+            default    => 0,
+        };
     }
 }

@@ -34,6 +34,17 @@ class ScanCommand extends Command
         // Print the enterprise header
         $ui->header('Engineering Intelligence Package');
 
+        // ── Step 3: Print active filters if any ────────────────────────────
+        $active = array_filter([
+            'severity' => $this->option('severity'),
+            'type'     => $this->option('type'),
+            'file'     => $this->option('file'),
+            'limit'    => $this->option('limit'),
+            'sort'     => $this->option('sort'),
+        ]);
+
+        $this->printActiveFilters();
+
         $result = null;
 
         try {
@@ -55,7 +66,7 @@ class ScanCommand extends Command
                     'ai_failed'           => $subSteps[] = "⚠️  AI analysis failed: {$data}",
                     default               => null,
                 };
-            });
+            }, $active);
 
             // Print all collected sub-steps now that the scan is done
             foreach ($subSteps as $line) {
@@ -68,9 +79,6 @@ class ScanCommand extends Command
             $this->error("❌ Scan failed: " . $e->getMessage());
             return self::FAILURE;
         }
-
-        // ── Step 3: Print active filters if any ────────────────────────────
-        $this->printActiveFilters();
 
         // ── Step 4: Persist report files ───────────────────────────────────
         $this->line('📄 <fg=white>Generating reports...</>');
@@ -91,16 +99,8 @@ class ScanCommand extends Command
         $this->newLine();
 
         // ── Step 5: Print the full summary table ───────────────────────────
-        $active = array_filter([
-            'severity' => $this->option('severity'),
-            'type'     => $this->option('type'),
-            'file'     => $this->option('file'),
-            'limit'    => $this->option('limit'),
-            'sort'     => $this->option('sort'),
-        ]);
-
         $printer = app(\Techvoot\EIP\Reporting\ConsoleSummaryPrinter::class);
-        $printer->print($this, $result, [], $active);
+        $printer->print($this, $result, $generatedFiles, $active);
 
         // ── Footer ─────────────────────────────────────────────────────────
         $elapsed = (microtime(true) - $startTime) * 1000;

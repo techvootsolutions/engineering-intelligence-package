@@ -170,6 +170,19 @@ php artisan eip --export
 
 # Available Options
 
+Here is a quick summary of all available command-line flags:
+
+| Option | Description |
+| :--- | :--- |
+| `--markdown` | Output report in Markdown format |
+| `--export` | Generate all reports (JSON + Markdown) |
+| `--output=` | Custom output directory or file path |
+| `--severity=` | Filter output by severity (`critical`, `high`, `warning`, `info`) |
+| `--type=` | Filter output by issue type slug (e.g. `potential_n_plus_one`) |
+| `--file=` | Partial filename filter for output (e.g. `UserController`) |
+| `--limit=` | Cap output to N issues |
+| `--sort=` | Sort field: `severity` (default), `file`, `line` |
+
 ### Save Reports to a Custom Location
 
 ```bash
@@ -198,7 +211,25 @@ info
 Show only specific issue types:
 
 ```bash
-php artisan eip --type=n_plus_one
+php artisan eip --type=potential_n_plus_one
+```
+
+Available issue types:
+
+```text
+closure_route_detected
+env_helper_outside_config
+event_contains_handler
+fat_controller
+god_class_service
+long_method
+mass_assignment_vulnerability
+missing_form_request
+missing_transaction
+potential_n_plus_one
+potential_sql_injection
+synchronous_job_dispatch
+too_many_dependencies
 ```
 
 ### Filter by File Name
@@ -254,7 +285,7 @@ php artisan eip --severity=critical
 php artisan eip --file=UserController
 
 # Show only N+1 query issues
-php artisan eip --type=n_plus_one
+php artisan eip --type=potential_n_plus_one
 
 # Limit output to 10 results
 php artisan eip --limit=10

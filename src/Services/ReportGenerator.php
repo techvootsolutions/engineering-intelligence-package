@@ -42,12 +42,12 @@ class ReportGenerator
      * @param \Closure|null $onProgress  Optional progress event callback.
      * @return ScanResult  Fully populated result.
      */
-    public function generate(?callable $onProgress = null): ScanResult
+    public function generate(?callable $onProgress = null, array $filters = []): ScanResult
     {
         $startTime = microtime(true);
 
         // ── Phase 1: Static Scan ──────────────────────────────────────────────
-        $result = $this->projectScanner->scan($onProgress);
+        $result = $this->projectScanner->scan($onProgress, $filters);
 
         // Notify: all issues have been gathered from the static scan
         if ($onProgress) {
