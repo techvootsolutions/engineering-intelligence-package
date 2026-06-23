@@ -18,7 +18,7 @@ class OpenAIProvider implements AIProviderInterface
     public function analyzeContext(array $context): string
     {
         $prompt  = $this->promptBuilder->buildFromContext($context);
-        $apiKey  = config('eip.providers.openai.api_key');
+        $apiKey  = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model   = config('eip.models.openai', 'gpt-4o');
         $timeout = config('eip.timeout', 60);
 
@@ -60,7 +60,7 @@ class OpenAIProvider implements AIProviderInterface
      */
     public function analyze(string $prompt): string
     {
-        $apiKey  = config('eip.providers.openai.api_key');
+        $apiKey  = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model   = config('eip.models.openai', 'gpt-4o');
         $timeout = config('eip.timeout', 60);
 

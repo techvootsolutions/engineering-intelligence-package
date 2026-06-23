@@ -18,7 +18,7 @@ class GeminiProvider implements AIProviderInterface
     public function analyzeContext(array $context): string
     {
         $prompt  = $this->promptBuilder->buildFromContext($context);
-        $apiKey  = config('eip.providers.gemini.api_key');
+        $apiKey  = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model   = config('eip.models.gemini', 'gemini-2.0-flash');
         $timeout = config('eip.timeout', 60);
 
@@ -58,7 +58,7 @@ class GeminiProvider implements AIProviderInterface
      */
     public function analyze(string $prompt): string
     {
-        $apiKey  = config('eip.providers.gemini.api_key');
+        $apiKey  = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model   = config('eip.models.gemini', 'gemini-2.0-flash');
         $timeout = config('eip.timeout', 60);
 

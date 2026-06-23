@@ -18,7 +18,7 @@ class OpenRouterProvider implements AIProviderInterface
     public function analyzeContext(array $context): string
     {
         $prompt  = $this->promptBuilder->buildFromContext($context);
-        $apiKey  = config('eip.providers.openrouter.api_key');
+        $apiKey  = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model   = config('eip.models.openrouter', 'gpt-4');
         $timeout = config('eip.timeout', 60);
 
@@ -60,7 +60,7 @@ class OpenRouterProvider implements AIProviderInterface
      */
     public function analyze(string $prompt): string
     {
-        $apiKey  = config('eip.providers.openrouter.api_key');
+        $apiKey  = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model   = config('eip.models.openrouter', 'gpt-4');
         $timeout = config('eip.timeout', 60);
 

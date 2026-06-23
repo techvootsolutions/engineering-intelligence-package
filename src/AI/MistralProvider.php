@@ -23,7 +23,7 @@ class MistralProvider implements AIProviderInterface
         $prompt = $this->promptBuilder
             ->buildFromContext($context);
 
-        $apiKey = config('eip.providers.mistral.api_key') ?: env('MISTRAL_API_KEY');
+        $apiKey = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model = config(
             'eip.models.mistral',
             'codestral-latest'
@@ -97,7 +97,7 @@ class MistralProvider implements AIProviderInterface
      */
     public function analyze(string $prompt): string
     {
-        $apiKey = config('eip.providers.mistral.api_key') ?: env('MISTRAL_API_KEY');
+        $apiKey = config('eip.api_key') ?: env('EIP_AI_KEY');
         $model = config(
             'eip.models.mistral',
             'codestral-latest'
