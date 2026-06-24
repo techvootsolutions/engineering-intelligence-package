@@ -57,8 +57,17 @@ class MarkdownReportGenerator implements ReportExporterInterface
         }
 
         // ── AI Insights ───────────────────────────────────────────────────
+        if (!empty($result->metadata['custom_instruction'])) {
+            $md .= "---\n\n## AI Analysis Configuration\n\n";
+            $md .= "**Custom User Instruction:**\n";
+            $md .= "> " . str_replace("\n", "\n> ", $result->metadata['custom_instruction']) . "\n\n";
+        }
+
         if ($result->aiReport) {
-            $md .= "---\n\n## AI Insights\n\n";
+            if (empty($result->metadata['custom_instruction'])) {
+                $md .= "---\n\n";
+            }
+            $md .= "## AI Insights\n\n";
             $md .= $result->aiReport . "\n\n";
         }
 

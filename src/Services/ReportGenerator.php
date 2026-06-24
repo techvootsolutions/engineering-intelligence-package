@@ -42,7 +42,7 @@ class ReportGenerator
      * @param \Closure|null $onProgress  Optional progress event callback.
      * @return ScanResult  Fully populated result.
      */
-    public function generate(?callable $onProgress = null, array $filters = []): ScanResult
+    public function generate(?callable $onProgress = null, array $filters = [], ?string $customInstruction = null): ScanResult
     {
         $startTime = microtime(true);
 
@@ -68,6 +68,12 @@ class ReportGenerator
             try {
                 // Phase 2: Build compressed, token-safe AI context
                 $context          = $this->aiContextSerializer->buildContext($result);
+
+                if ($customInstruction) {
+                    $context['custom_instruction'] = $customInstruction;
+                    $result->metadata['custom_instruction'] = $customInstruction;
+                }
+
                 $result->aiContext = $context;
 
                 if ($onProgress) {

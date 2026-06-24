@@ -35,6 +35,9 @@ class PromptBuilder
         $totalIssues = $meta['total_issues']       ?? '?';
         $compression = $meta['compression_ratio']  ?? '?';
 
+        $customInstruction = $context['custom_instruction'] ?? null;
+        $customInstructionText = $customInstruction ? "\nCUSTOM USER FOCUS:\nThe user would like additional emphasis on:\n\"{$customInstruction}\"\n\nUse this as supplemental guidance. Do not ignore project findings or analysis rules.\n" : '';
+
         return <<<PROMPT
         You are a Senior {$projectType} Architect performing an engineering intelligence audit.
 
@@ -47,7 +50,7 @@ class PromptBuilder
         {$hotspotText}
         COMPRESSED ISSUE CHUNKS (aggregated, de-duplicated):
         {$chunksJson}
-
+        {$customInstructionText}
         Generate a structured engineering intelligence report with these exact sections:
 
         ## Executive Summary

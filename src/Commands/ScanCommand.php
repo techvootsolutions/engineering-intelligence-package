@@ -45,6 +45,39 @@ class ScanCommand extends Command
 
         $this->printActiveFilters();
 
+        $customInstruction = null;
+        if (config('eip.ai_enabled', true)) {
+            $this->newLine();
+            $this->line('🤖 <fg=white;options=bold>AI Report Generation Enabled</>');
+            $this->newLine();
+            $this->line('Would you like to add custom instructions for the AI report?');
+            $this->newLine();
+            
+            $wantsCustom = $this->choice('', ['0' => 'No', '1' => 'Yes'], '0');
+            
+            if ($wantsCustom === '1' || strtolower($wantsCustom) === 'yes') {
+                $this->newLine();
+                $this->line('<fg=gray>Examples:</>');
+                $this->line('<fg=gray>• Focus on security vulnerabilities</>');
+                $this->line('<fg=gray>• Review architecture quality</>');
+                $this->line('<fg=gray>• Find performance bottlenecks</>');
+                $this->line('<fg=gray>• Suggest Laravel best practices</>');
+                $this->newLine();
+                
+                $customInstruction = $this->ask('Enter your instructions');
+                
+                $customInstruction = trim((string) $customInstruction);
+                if (strlen($customInstruction) > 500) {
+                    $this->warn('Instructions exceeded 500 characters and have been truncated.');
+                    $customInstruction = substr($customInstruction, 0, 500);
+                }
+                if ($customInstruction === '') {
+                    $customInstruction = null;
+                }
+            }
+            $this->newLine();
+        }
+
         $result = null;
 
         try {
@@ -66,7 +99,7 @@ class ScanCommand extends Command
                     'ai_failed'           => $subSteps[] = "⚠️  AI analysis failed: {$data}",
                     default               => null,
                 };
-            }, $active);
+            }, $active, $customInstruction);
 
             // Print all collected sub-steps now that the scan is done
             foreach ($subSteps as $line) {
