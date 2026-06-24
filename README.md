@@ -138,6 +138,34 @@ EIP_AI_KEY=your-api-key-here
 
 > AI integration is optional. EIP can generate engineering reports even when AI is disabled.
 
+### Interactive Custom AI Instructions
+
+When AI integration is enabled (`EIP_AI_ENABLED=true`), running the `eip` command will interactively prompt you to add custom instructions for the AI model:
+
+```text
+🤖 AI Report Generation Enabled
+
+Would you like to add custom instructions for the AI report?
+
+[0] No
+[1] Yes
+> 1
+
+Examples:
+• Focus on security vulnerabilities
+• Review architecture quality
+• Find performance bottlenecks
+• Suggest Laravel best practices
+
+Enter your instructions:
+> Review authentication and authorization security.
+```
+
+Your custom instructions are:
+* **Safe from Prompt Injection:** Structured carefully as supplemental guidance so the AI doesn't ignore core analysis rules.
+* **Fully Traceable:** Saved directly into your raw JSON report metadata.
+* **Self-Documenting:** Displayed prominently in the generated Markdown reports under `## AI Analysis Configuration`.
+
 ---
 
 # Running Analysis
