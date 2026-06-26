@@ -2,6 +2,8 @@
 namespace Techvoot\EIP\Analyzers;
 
 use Techvoot\EIP\Rules\ServiceGodClassRule;
+use Techvoot\EIP\Rules\ServiceDependencyOverloadRule;
+use Techvoot\EIP\Rules\PotentialCircularDependencyRule;
 
 class ServiceAnalyzer extends BaseAnalyzer
 {
@@ -11,6 +13,8 @@ class ServiceAnalyzer extends BaseAnalyzer
     {
         $this->rules = [
             new ServiceGodClassRule(),
+            new ServiceDependencyOverloadRule(),
+            new PotentialCircularDependencyRule(),
         ];
     }
 

@@ -1,18 +1,18 @@
 <?php
 namespace Techvoot\EIP\Analyzers;
 
-use Techvoot\EIP\Rules\SyncDispatchRule;
-use Techvoot\EIP\Rules\JobPayloadTooLargeRule;
+use Techvoot\EIP\Rules\RequestMissingAuthorizationRule;
+use Techvoot\EIP\Rules\EmptyValidationRulesRule;
 
-class JobAnalyzer extends BaseAnalyzer
+class RequestAnalyzer extends BaseAnalyzer
 {
     private array $rules;
 
     public function __construct()
     {
         $this->rules = [
-            new SyncDispatchRule(),
-            new JobPayloadTooLargeRule(),
+            new RequestMissingAuthorizationRule(),
+            new EmptyValidationRulesRule(),
         ];
     }
 
@@ -20,15 +20,15 @@ class JobAnalyzer extends BaseAnalyzer
     {
         $issues = [];
 
-        $jobs = array_filter(
+        $requests = array_filter(
             $files,
-            fn($file) => $file->classification === 'jobs'
+            fn($file) => $file->classification === 'requests'
         );
 
         foreach ($this->rules as $rule) {
             $issues = array_merge(
                 $issues,
-                $rule->analyze($jobs)
+                $rule->analyze($requests)
             );
         }
 

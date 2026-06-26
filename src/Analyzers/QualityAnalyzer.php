@@ -1,18 +1,16 @@
 <?php
 namespace Techvoot\EIP\Analyzers;
 
-use Techvoot\EIP\Rules\SyncDispatchRule;
-use Techvoot\EIP\Rules\JobPayloadTooLargeRule;
+use Techvoot\EIP\Rules\MissingStrictTypesRule;
 
-class JobAnalyzer extends BaseAnalyzer
+class QualityAnalyzer extends BaseAnalyzer
 {
     private array $rules;
 
     public function __construct()
     {
         $this->rules = [
-            new SyncDispatchRule(),
-            new JobPayloadTooLargeRule(),
+            new MissingStrictTypesRule(),
         ];
     }
 
@@ -20,15 +18,11 @@ class JobAnalyzer extends BaseAnalyzer
     {
         $issues = [];
 
-        $jobs = array_filter(
-            $files,
-            fn($file) => $file->classification === 'jobs'
-        );
-
+        // Quality rules scan the entire codebase
         foreach ($this->rules as $rule) {
             $issues = array_merge(
                 $issues,
-                $rule->analyze($jobs)
+                $rule->analyze($files)
             );
         }
 

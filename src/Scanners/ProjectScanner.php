@@ -57,6 +57,19 @@ class ProjectScanner
         $issueBreakdown = $this->issueBreakdownGenerator->generate($issuesArray);
         $summary = $this->riskSummaryGenerator->generate($issuesArray);
 
+        // Calculate finding breakdown based on rule types
+        $findingBreakdown = [
+            'deterministic' => 0,
+            'heuristic' => 0,
+            'architectural' => 0,
+        ];
+        foreach ($issuesArray as $issue) {
+            $type = $issue['rule_type'] ?? 'heuristic';
+            if (isset($findingBreakdown[$type])) {
+                $findingBreakdown[$type]++;
+            }
+        }
+
         return new ScanResult(
             projectName: $composer['name'] ?? 'Unknown',
             projectType: $composer['type'] ?? 'project',
@@ -69,7 +82,9 @@ class ProjectScanner
             ],
             issues: $issuesArray,
             issueBreakdown: $issueBreakdown,
-            summary: $summary
+            summary: $summary,
+            architecturePattern: config('eip.architecture.pattern', 'laravel'),
+            findingBreakdown: $findingBreakdown
         );
     }
 

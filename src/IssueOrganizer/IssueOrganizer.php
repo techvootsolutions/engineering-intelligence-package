@@ -58,6 +58,7 @@ class IssueOrganizer
                 $grouped[$type] = [
                     'count' => 0,
                     'severity' => $issue['severity'] ?? 'info',
+                    'classification' => $issue['classification'] ?? 'manual_review_required',
                     'files' => [],
                     'sample_methods' => [],
                     'issue_ids' => [],

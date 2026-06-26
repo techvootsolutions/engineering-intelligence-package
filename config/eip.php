@@ -16,4 +16,43 @@ return [
     ],
 
     'api_key' => env('EIP_AI_KEY'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Architecture Pattern Configuration
+    |--------------------------------------------------------------------------
+    | Supported: laravel, service, repository, ddd, custom
+    */
+    'architecture' => [
+        'pattern' => 'laravel',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Layer Strategies
+    |--------------------------------------------------------------------------
+    | Options: controller, service, policy, middleware, mixed, form_request, repository
+    */
+    'authorization_layer' => 'controller',
+    'validation_layer' => 'form_request',
+    'transaction_layer' => 'service',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rule Engine Adjustments
+    |--------------------------------------------------------------------------
+    */
+    'disabled_rules' => [
+        // 'fat_controller',
+    ],
+
+    'rule_overrides' => [
+        // 'fat_controller' => ['severity' => 'info'],
+    ],
+
+    'thresholds' => [
+        'fat_controller_lines' => 250,
+        'long_method_lines' => 80,
+        'dependency_limit' => 8,
+    ],
 ];

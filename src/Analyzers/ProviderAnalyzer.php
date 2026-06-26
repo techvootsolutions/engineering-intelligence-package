@@ -1,18 +1,16 @@
 <?php
 namespace Techvoot\EIP\Analyzers;
 
-use Techvoot\EIP\Rules\SyncDispatchRule;
-use Techvoot\EIP\Rules\JobPayloadTooLargeRule;
+use Techvoot\EIP\Rules\HeavyServiceProviderBootRule;
 
-class JobAnalyzer extends BaseAnalyzer
+class ProviderAnalyzer extends BaseAnalyzer
 {
     private array $rules;
 
     public function __construct()
     {
         $this->rules = [
-            new SyncDispatchRule(),
-            new JobPayloadTooLargeRule(),
+            new HeavyServiceProviderBootRule(),
         ];
     }
 
@@ -20,15 +18,15 @@ class JobAnalyzer extends BaseAnalyzer
     {
         $issues = [];
 
-        $jobs = array_filter(
+        $providers = array_filter(
             $files,
-            fn($file) => $file->classification === 'jobs'
+            fn($file) => $file->classification === 'providers'
         );
 
         foreach ($this->rules as $rule) {
             $issues = array_merge(
                 $issues,
-                $rule->analyze($jobs)
+                $rule->analyze($providers)
             );
         }
 

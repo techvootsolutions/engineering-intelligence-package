@@ -26,30 +26,64 @@ class MarkdownReportGenerator implements ReportExporterInterface
         $md .= "## Project Health\n\n";
         $md .= "| Metric | Value |\n";
         $md .= "|--------|-------|\n";
-        $md .= "| Health Score | **{$healthScore}** |\n";
-        $md .= "| Grade | **{$grade}** |\n";
-        $md .= "| Total Issues | {$totalIssues} |\n";
-        $md .= "| Critical | {$criticalCount} |\n";
-        $md .= "| High | {$highCount} |\n";
-        $md .= "| Warnings | {$warningCount} |\n";
-        $md .= "| Info | {$infoCount} |\n\n";
+        $md .= "| Overall Health | **{$healthScore}** (Grade {$grade}) |\n";
+        $md .= "| Security Score | **" . ($result->health['security_score'] ?? 100) . "** |\n";
+        $md .= "| Architecture Score | **" . ($result->health['architecture_score'] ?? 100) . "** |\n";
+        $md .= "| Performance Score | **" . ($result->health['performance_score'] ?? 100) . "** |\n";
+        $md .= "| Quality Score | **" . ($result->health['quality_score'] ?? 100) . "** |\n";
+        $md .= "| Total Issues | {$totalIssues} (🔴 {$criticalCount} | 🟠 {$highCount} | 🟡 {$warningCount} | 🔵 {$infoCount}) |\n\n";
+
+        // ── Finding Breakdown ─────────────────────────────────────────────
+        if (!empty($result->findingBreakdown)) {
+            $md .= "## Finding Breakdown\n\n";
+            $md .= "- Deterministic Findings: " . ($result->findingBreakdown['deterministic'] ?? 0) . "\n";
+            $md .= "- Heuristic Findings: " . ($result->findingBreakdown['heuristic'] ?? 0) . "\n";
+            $md .= "- Architectural Findings: " . ($result->findingBreakdown['architectural'] ?? 0) . "\n\n";
+        }
 
         // ── Risk Hotspots (top 5) ─────────────────────────────────────────
         if (!empty($result->hotspots)) {
             $md .= "## Risk Hotspots\n\n";
-            $md .= "| File | Risk Score | Issues | Critical |\n";
-            $md .= "|------|-----------|--------|----------|\n";
             foreach (array_slice($result->hotspots, 0, 5) as $h) {
                 $shortFile = basename($h['file']);
-                $md .= "| `{$shortFile}` | {$h['risk_score']} | {$h['issue_count']} | {$h['critical_count']} |\n";
+                $md .= "### `{$shortFile}`\n\n";
+                $md .= "File has {$h['issue_count']} issues (Risk Score: {$h['risk_score']}):\n\n";
+                $md .= "- Security Issues: " . ($h['categories']['security'] ?? 0) . "\n";
+                $md .= "- Architecture Issues: " . ($h['categories']['architecture'] ?? 0) . "\n";
+                $md .= "- Performance Issues: " . ($h['categories']['performance'] ?? 0) . "\n";
+                $md .= "- Quality Issues: " . ($h['categories']['quality'] ?? 0) . "\n\n";
             }
-            $md .= "\n";
         }
 
-        // ── Issues grouped by type ────────────────────────────────────────
+        // ── Issues grouped by type & classification ───────────────────────
         if (!empty($result->groupedIssues)) {
-            $md .= "## Issues by Type\n\n";
-            $md .= $this->formatGroupedIssues($result->groupedIssues);
+            $verified = [];
+            $manualReview = [];
+
+            foreach ($result->groupedIssues as $key => $data) {
+                $classification = $data['classification'] ?? 'manual_review_required'; // Default to manual
+                // Fallback for flat fallback which lacks classification in the group root:
+                if (!isset($data['classification']) && isset($data['issues'][0]['classification'])) {
+                    $classification = $data['issues'][0]['classification'];
+                }
+
+                if ($classification === 'verified') {
+                    $verified[$key] = $data;
+                } else {
+                    $manualReview[$key] = $data;
+                }
+            }
+
+            if (!empty($verified)) {
+                $md .= "## High Confidence Findings\n\n";
+                $md .= $this->formatGroupedIssues($verified);
+            }
+
+            if (!empty($manualReview)) {
+                $md .= "## Requires Manual Review\n\n";
+                $md .= $this->formatGroupedIssues($manualReview);
+            }
+
         } else {
             // Fallback: flat critical list
             $md .= "## Critical Issues\n\n";
@@ -85,15 +119,22 @@ class MarkdownReportGenerator implements ReportExporterInterface
         foreach ($groupedIssues as $key => $data) {
             // New type-aggregated structure: {count, severity, files, sample_methods, issue_ids}
             if (isset($data['count'])) {
-                $typeLabel  = ucwords(str_replace('_', ' ', $key));
+                $typeLabel  = !empty($data['title']) ? $data['title'] : ucwords(str_replace('_', ' ', $key));
+                $confidence = $data['confidence'] ?? '';
                 $sevEmoji   = match (strtolower($data['severity'] ?? 'info')) {
                     'critical' => '🔴',
                     'high'     => '🟠',
                     'warning'  => '🟡',
                     default    => '🔵',
                 };
+                $confBadge  = match ($confidence) {
+                    'high'   => ' ✅ `high confidence`',
+                    'medium' => ' ⚠️ `medium confidence`',
+                    'low'    => ' 💡 `low confidence`',
+                    default  => '',
+                };
 
-                $md .= "### {$sevEmoji} {$typeLabel}\n\n";
+                $md .= "### {$sevEmoji} {$typeLabel}{$confBadge}\n\n";
                 $md .= "> **Count:** {$data['count']}  \n";
                 $md .= "> **Severity:** {$data['severity']}  \n";
 
@@ -136,7 +177,7 @@ class MarkdownReportGenerator implements ReportExporterInterface
 
     private function formatSingleIssue(array $issue): string
     {
-        $typeLabel = ucwords(str_replace('_', ' ', $issue['type'] ?? 'unknown'));
+        $typeLabel = !empty($issue['title']) ? $issue['title'] : ucwords(str_replace('_', ' ', $issue['type'] ?? 'unknown'));
         $sev       = strtolower($issue['severity'] ?? 'info');
         $sevEmoji  = match ($sev) {
             'critical' => '🔴',
@@ -144,8 +185,16 @@ class MarkdownReportGenerator implements ReportExporterInterface
             'warning'  => '🟡',
             default    => '🔵',
         };
+        $confidence  = $issue['confidence'] ?? '';
+        $ruleType    = $issue['rule_type']  ?? '';
+        $confBadge   = match ($confidence) {
+            'high'   => ' `✔ high confidence`',
+            'medium' => ' `⚠️ medium confidence`',
+            'low'    => ' `💡 low confidence`',
+            default  => '',
+        };
 
-        $md  = "#### {$sevEmoji} {$typeLabel}";
+        $md  = "#### {$sevEmoji} {$typeLabel}{$confBadge}";
         if (!empty($issue['id'])) {
             $md .= " `{$issue['id']}`";
         }
@@ -157,6 +206,9 @@ class MarkdownReportGenerator implements ReportExporterInterface
         if (!empty($issue['method'])) {
             $md .= "**Method:** `{$issue['method']}()`  \n";
         }
+        if (!empty($ruleType)) {
+            $md .= "**Rule Type:** `{$ruleType}`  \n";
+        }
         if (!empty($issue['message'])) {
             $md .= "**Issue:** {$issue['message']}  \n";
         }
@@ -165,6 +217,9 @@ class MarkdownReportGenerator implements ReportExporterInterface
         }
         if (!empty($issue['recommendation'])) {
             $md .= "\n> 💡 {$issue['recommendation']}\n";
+        }
+        if (!empty($issue['note'])) {
+            $md .= "\n> 📌 *Note: {$issue['note']}*\n";
         }
 
         $md .= "\n";

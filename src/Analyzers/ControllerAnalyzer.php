@@ -7,6 +7,9 @@ use Techvoot\EIP\Rules\MissingFormRequestRule;
 use Techvoot\EIP\Rules\MissingTransactionRule;
 use Techvoot\EIP\Rules\PotentialNPlusOneRule;
 use Techvoot\EIP\Rules\TooManyDependenciesRule;
+use Techvoot\EIP\Rules\QueryInControllerRule;
+use Techvoot\EIP\Rules\MissingAuthorizationCheckRule;
+use Techvoot\EIP\Rules\ControllerDependencyOverloadRule;
 
 class ControllerAnalyzer extends BaseAnalyzer
 {
@@ -21,6 +24,9 @@ class ControllerAnalyzer extends BaseAnalyzer
             new MissingFormRequestRule(),
             new MissingTransactionRule(),
             new PotentialNPlusOneRule(),
+            new QueryInControllerRule(),
+            new MissingAuthorizationCheckRule(),
+            new ControllerDependencyOverloadRule(),
         ];
     }
 

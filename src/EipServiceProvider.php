@@ -30,9 +30,14 @@ class EipServiceProvider extends ServiceProvider
             $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\RouteAnalyzer());
             $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\JobAnalyzer());
             $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\EventAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\MigrationAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\RequestAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\ProviderAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\HelperAnalyzer());
 
-            // Security analyzer scans the entire codebase for vulnerabilities
+            // Global analyzers
             $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\SecurityAnalyzer());
+            $engine->addAnalyzer(new \Techvoot\EIP\Analyzers\QualityAnalyzer());
 
             return $engine;
         });

@@ -25,13 +25,40 @@ class ConsoleSummaryPrinter
         $warningCount  = count(array_filter($result->issues, fn ($i) => ($i['severity'] ?? '') === 'warning'));
         $infoCount     = count(array_filter($result->issues, fn ($i) => ($i['severity'] ?? '') === 'info'));
 
-        $command->line("  <fg=white;options=bold>Health Score :</> <fg={$gradeColor};options=bold>{$healthScore} ({$grade})</>");
-        $command->line("  <fg=white;options=bold>Total Issues :</> {$issueCount}");
-        $command->line("  <fg=red>🔴 Critical   :</> {$criticalCount}");
-        $command->line("  <fg=yellow>🟠 High       :</> {$highCount}");
-        $command->line("  <fg=yellow>🟡 Warnings   :</> {$warningCount}");
-        $command->line("  <fg=blue>🔵 Info       :</> {$infoCount}");
+        $command->line("  <fg=white;options=bold>Overall Health :</> <fg={$gradeColor};options=bold>{$healthScore} ({$grade})</>");
         $command->newLine();
+        
+        $sec = $result->health['security_score'] ?? 100;
+        $arch = $result->health['architecture_score'] ?? 100;
+        $perf = $result->health['performance_score'] ?? 100;
+        $qual = $result->health['quality_score'] ?? 100;
+        
+        $command->line("  <fg=white;options=bold>Security       :</> {$sec}");
+        $command->line("  <fg=white;options=bold>Architecture   :</> {$arch}");
+        $command->line("  <fg=white;options=bold>Performance    :</> {$perf}");
+        $command->line("  <fg=white;options=bold>Code Quality   :</> {$qual}");
+        $command->newLine();
+
+        $command->line("  <fg=white;options=bold>Total Issues   :</> {$issueCount}");
+        $command->line("  <fg=red>🔴 Critical     :</> {$criticalCount}");
+        $command->line("  <fg=yellow>🟠 High         :</> {$highCount}");
+        $command->line("  <fg=yellow>🟡 Warnings     :</> {$warningCount}");
+        $command->line("  <fg=blue>🔵 Info         :</> {$infoCount}");
+        $command->newLine();
+
+        // ── Finding Breakdown ─────────────────────────────────────────────
+        if (!empty($result->findingBreakdown)) {
+            $det  = $result->findingBreakdown['deterministic']  ?? 0;
+            $heur = $result->findingBreakdown['heuristic']      ?? 0;
+            $arch = $result->findingBreakdown['architectural']  ?? 0;
+
+            $command->line('<fg=white;options=bold>  📊 Finding Breakdown</>');
+            $command->newLine();
+            $command->line("  <fg=green>✔ Deterministic (Verified)    :</> {$det}");
+            $command->line("  <fg=yellow>~ Heuristic (Pattern-Based)  :</> {$heur}");
+            $command->line("  <fg=cyan>⬡ Architectural (Opinion)     :</> {$arch}");
+            $command->newLine();
+        }
 
         // ── Risk Hotspot files (top 5) ─────────────────────────────────────
         if (!empty($result->hotspots)) {
@@ -40,18 +67,23 @@ class ConsoleSummaryPrinter
 
             $rows = [];
             foreach (array_slice($result->hotspots, 0, 5) as $h) {
-                $bar        = $this->riskBar($h['risk_score']);
-                $rows[]     = [
+                $bar  = $this->riskBar($h['risk_score']);
+                $cats = $h['categories'] ?? [];
+                $rows[] = [
                     basename($h['file']),
                     $h['risk_score'],
                     $h['issue_count'],
                     $h['critical_count'],
+                    ($cats['security']     ?? 0) . 'S / ' .
+                    ($cats['architecture'] ?? 0) . 'A / ' .
+                    ($cats['performance']  ?? 0) . 'P / ' .
+                    ($cats['quality']      ?? 0) . 'Q',
                     $bar,
                 ];
             }
 
             $command->table(
-                ['File', 'Risk Score', 'Issues', 'Critical', 'Severity Bar'],
+                ['File', 'Risk Score', 'Issues', 'Critical', 'Categories', 'Severity Bar'],
                 $rows
             );
         }
@@ -73,19 +105,34 @@ class ConsoleSummaryPrinter
 
             $rows = [];
             foreach ($issues as $issue) {
-                $severity = ucfirst($issue['severity'] ?? 'Unknown');
+                $severity       = ucfirst($issue['severity'] ?? 'Unknown');
+                $confidence     = $issue['confidence'] ?? 'medium';
+                $classification = $issue['classification'] ?? 'manual_review_required';
+
+                $confidenceLabel = match ($confidence) {
+                    'high'   => '<fg=green>High</>',
+                    'medium' => '<fg=yellow>Medium</>',
+                    'low'    => '<fg=cyan>Low</>',
+                    default  => $confidence,
+                };
+
+                $classLabel = $classification === 'verified'
+                    ? '<fg=green>✔ Verified</>'
+                    : '<fg=yellow>⚠ Manual Review</>';
+
                 $rows[] = [
                     $issue['id']   ?? '—',
                     $severity,
+                    $confidenceLabel,
+                    $classLabel,
                     basename($issue['file'] ?? '—'),
                     $issue['line'] > 0 ? $issue['line'] : '—',
-                    ucwords(str_replace('_', ' ', $issue['type'] ?? '—')),
-                    $this->truncate($issue['message'] ?? '', 55),
+                    $this->truncate($issue['title'] ?? ucwords(str_replace('_', ' ', $issue['type'] ?? '—')), 45),
                 ];
             }
 
             $command->table(
-                ['ID', 'Severity', 'File', 'Line', 'Type', 'Message'],
+                ['ID', 'Severity', 'Confidence', 'Classification', 'File', 'Line', 'Finding'],
                 $rows
             );
         } elseif ($isFiltered) {

@@ -30,6 +30,7 @@ class HotspotCalculator
         // First pass — accumulate raw scores
         foreach ($groupedIssues as $file => $issues) {
             $counts = $this->countBySeverity($issues);
+            $catCounts = $this->countByCategory($issues);
             $raw    = $this->rawScore($counts);
 
             if ($raw > $maxRawScore) {
@@ -43,6 +44,7 @@ class HotspotCalculator
                 'high_count'     => $counts['high'],
                 'warning_count'  => $counts['warning'],
                 'info_count'     => $counts['info'],
+                'categories'     => $catCounts,
                 '_raw'           => $raw,
             ];
         }
@@ -60,6 +62,22 @@ class HotspotCalculator
         usort($hotspots, fn ($a, $b) => $b['risk_score'] <=> $a['risk_score']);
 
         return $hotspots;
+    }
+
+    private function countByCategory(array $issues): array
+    {
+        $counts = ['security' => 0, 'architecture' => 0, 'performance' => 0, 'quality' => 0];
+
+        foreach ($issues as $issue) {
+            $cat = strtolower($issue['category'] ?? 'quality');
+            if (array_key_exists($cat, $counts)) {
+                $counts[$cat]++;
+            } else {
+                $counts['quality']++; // Fallback
+            }
+        }
+
+        return $counts;
     }
 
     // -----------------------------------------------------------------------

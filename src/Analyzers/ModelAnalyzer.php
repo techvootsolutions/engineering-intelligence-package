@@ -2,6 +2,8 @@
 namespace Techvoot\EIP\Analyzers;
 
 use Techvoot\EIP\Rules\MassAssignmentRule;
+use Techvoot\EIP\Rules\UnguardedModelRule;
+use Techvoot\EIP\Rules\MissingRelationshipReturnTypeRule;
 
 class ModelAnalyzer extends BaseAnalyzer
 {
@@ -11,6 +13,8 @@ class ModelAnalyzer extends BaseAnalyzer
     {
         $this->rules = [
             new MassAssignmentRule(),
+            new UnguardedModelRule(),
+            new MissingRelationshipReturnTypeRule(),
         ];
     }
 

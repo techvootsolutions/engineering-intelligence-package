@@ -27,7 +27,11 @@ class RuleEngine
 
         foreach ($this->analyzers as $analyzer) {
             $issues = $analyzer->analyze($files);
-            $allIssues = array_merge($allIssues, $issues);
+            
+            $disabledRules = config('eip.disabled_rules', []);
+            $filteredIssues = array_filter($issues, fn($issue) => !in_array($issue->type, $disabledRules));
+            
+            $allIssues = array_merge($allIssues, $filteredIssues);
             $rulesExecuted += $analyzer->getRulesCount();
 
             if ($onProgress) {
